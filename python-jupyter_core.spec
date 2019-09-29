@@ -9,7 +9,7 @@ Summary:	Core common functionality of Jupyter projects
 Summary(pl.UTF-8):	Główna, wspólna funkcjonalność projektów Jupyter
 Name:		python-jupyter_core
 Version:	4.5.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/jupyter_core/
@@ -147,6 +147,7 @@ for f in $RPM_BUILD_ROOT%{_bindir}/jupyter* ; do
 done
 
 %py_postclean
+%{__rm} -r $RPM_BUILD_ROOT%{py_sitescriptdir}/jupyter_core/tests
 %endif
 
 %if %{with python3}
@@ -155,6 +156,8 @@ done
 for f in $RPM_BUILD_ROOT%{_bindir}/jupyte*[!2] ; do
 	%{__mv} "$f" "${f}-3"
 done
+
+%{__rm} -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/jupyter_core/tests
 %endif
 
 install -d $RPM_BUILD_ROOT{%{bash_compdir},%{zsh_compdir}}
