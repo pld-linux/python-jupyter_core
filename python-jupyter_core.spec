@@ -8,13 +8,13 @@
 Summary:	Core common functionality of Jupyter projects
 Summary(pl.UTF-8):	Główna, wspólna funkcjonalność projektów Jupyter
 Name:		python-jupyter_core
-Version:	4.5.0
-Release:	3
+Version:	4.6.3
+Release:	1
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/jupyter_core/
 Source0:	https://files.pythonhosted.org/packages/source/j/jupyter_core/jupyter_core-%{version}.tar.gz
-# Source0-md5:	07d11867c91d0dcac24c6732cf74c457
+# Source0-md5:	aaed36bf01888c9e810462e6226db70a
 Patch0:		%{name}-tests.patch
 Patch1:		%{name}-completions.patch
 URL:		https://pypi.org/project/jupyter_core/
