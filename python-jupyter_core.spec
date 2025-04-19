@@ -119,6 +119,7 @@ Dopełnianie parametrów w zsh dla poleceń jupyter.
 %if %{with tests}
 LC_ALL=C.UTF-8 \
 PYTHONPATH=$(pwd) \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 %{__python} -m pytest jupyter_core/tests
 %endif
 %endif
@@ -128,6 +129,7 @@ PYTHONPATH=$(pwd) \
 
 %if %{with tests}
 PYTHONPATH=$(pwd) \
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 %{__python3} -m pytest jupyter_core/tests
 %endif
 %endif
