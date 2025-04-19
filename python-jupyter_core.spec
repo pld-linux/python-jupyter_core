@@ -9,7 +9,7 @@ Summary:	Core common functionality of Jupyter projects
 Summary(pl.UTF-8):	Główna, wspólna funkcjonalność projektów Jupyter
 Name:		python-jupyter_core
 Version:	4.6.3
-Release:	7
+Release:	8
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/jupyter_core/
@@ -17,6 +17,7 @@ Source0:	https://files.pythonhosted.org/packages/source/j/jupyter_core/jupyter_c
 # Source0-md5:	aaed36bf01888c9e810462e6226db70a
 Patch0:		%{name}-tests.patch
 Patch1:		%{name}-completions.patch
+Patch2:		sphinx8.patch
 URL:		https://pypi.org/project/jupyter_core/
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.7
@@ -40,7 +41,7 @@ BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
 BuildRequires:	python3-sphinxcontrib_github_alt
 BuildRequires:	python3-traitlets >= 4.0
-BuildRequires:	sphinx-pdg-3
+BuildRequires:	sphinx-pdg-3 >= 8
 %endif
 Requires:	python-modules >= 1:2.7
 BuildArch:	noarch
@@ -109,6 +110,7 @@ Dopełnianie parametrów w zsh dla poleceń jupyter.
 %setup -q -n jupyter_core-%{version}
 %patch -P 0 -p1
 %patch -P 1 -p1
+%patch -P 2 -p1
 
 %build
 %if %{with python2}
