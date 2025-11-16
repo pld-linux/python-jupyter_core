@@ -3,13 +3,14 @@
 %bcond_without	doc	# Sphinx documentation
 %bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
-%bcond_with	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module (built from python3-jupyter_core.spec)
 
 Summary:	Core common functionality of Jupyter projects
 Summary(pl.UTF-8):	Główna, wspólna funkcjonalność projektów Jupyter
 Name:		python-jupyter_core
+# keep 4.6.x here for python2 support
 Version:	4.6.3
-Release:	9
+Release:	10
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/jupyter_core/
@@ -39,11 +40,13 @@ BuildRequires:	python3-traitlets >= 4.0
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	python3-sphinxcontrib_github_alt
-BuildRequires:	python3-traitlets >= 4.0
-BuildRequires:	sphinx-pdg-3 >= 8
+BuildRequires:	python-sphinxcontrib_github_alt
+BuildRequires:	python-traitlets >= 4.0
+BuildRequires:	sphinx-pdg-2
 %endif
 Requires:	python-modules >= 1:2.7
+Obsoletes:	bash-completion-jupyter < 4.7
+Obsoletes:	zsh-completion-jupyter < 4.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -80,32 +83,6 @@ API documentation for Python jupyter_core module.
 %description apidocs -l pl.UTF-8
 Dokumentacja API modułu Pythona jupyter_core.
 
-%package -n bash-completion-jupyter
-Summary:	Bash completion for jupyter commands
-Summary(pl.UTF-8):	Bashowe dopełnianie parametrów poleceń jupyter
-Group:		Applications/Shells
-Requires:	bash-completion >= 2.0
-#Requires:	python-jupyter_core or python3-jupyter_core
-
-%description -n bash-completion-jupyter
-Bash completion for jupyter commands.
-
-%description -n bash-completion-jupyter -l pl.UTF-8
-Bashowe dopełnianie parametrów poleceń jupyter.
-
-%package -n zsh-completion-jupyter
-Summary:	Zsh completion for jupyter commands
-Summary(pl.UTF-8):	Dopełnianie parametrów w zsh dla poleceń jupyter
-Group:		Applications/Shells
-#Requires:	python-jupyter_core or python3-jupyter_core
-Requires:	zsh
-
-%description -n zsh-completion-jupyter
-Zsh completion for jupyter commands.
-
-%description -n zsh-completion-jupyter -l pl.UTF-8
-Dopełnianie parametrów w zsh dla poleceń jupyter.
-
 %prep
 %setup -q -n jupyter_core-%{version}
 %patch -P 0 -p1
@@ -137,7 +114,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 %if %{with doc}
 PYTHONPATH=$(pwd) \
 %{__make} -C docs html \
-	SPHINXBUILD=sphinx-build-3
+	SPHINXBUILD=sphinx-build-2
 %endif
 
 %install
@@ -165,8 +142,8 @@ done
 %endif
 
 install -d $RPM_BUILD_ROOT{%{bash_compdir},%{zsh_compdir}}
-cp -p examples/completions-zsh $RPM_BUILD_ROOT%{zsh_compdir}/_jupyter
-cp -p examples/jupyter-completion.bash $RPM_BUILD_ROOT%{bash_compdir}/jupyter
+cp -p examples/completions-zsh $RPM_BUILD_ROOT%{zsh_compdir}/_jupyter2
+cp -p examples/jupyter-completion.bash $RPM_BUILD_ROOT%{bash_compdir}/jupyter2
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -181,6 +158,8 @@ rm -rf $RPM_BUILD_ROOT
 %{py_sitescriptdir}/jupyter.py[co]
 %{py_sitescriptdir}/jupyter_core
 %{py_sitescriptdir}/jupyter_core-%{version}-py*.egg-info
+%{bash_compdir}/jupyter2
+%{zsh_compdir}/_jupyter2
 %endif
 
 %if %{with python3}
@@ -201,11 +180,3 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc docs/_build/html/{_static,*.html,*.js}
 %endif
-
-%files -n bash-completion-jupyter
-%defattr(644,root,root,755)
-%{bash_compdir}/jupyter
-
-%files -n zsh-completion-jupyter
-%defattr(644,root,root,755)
-%{zsh_compdir}/_jupyter
